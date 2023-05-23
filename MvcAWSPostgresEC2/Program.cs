@@ -1,6 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using MvcAWSPostgresEC2.Data;
+using MvcAWSPostgresEC2.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+string connectionString = builder.Configuration.GetConnectionString("PostGresConnection");
+builder.Services.AddDbContext<DepartamentosContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddTransient<RepositoryDepartamentos>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -22,6 +29,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Departamentos}/{action=Index}/{id?}");
 
 app.Run();
